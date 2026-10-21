@@ -1,0 +1,22 @@
+name: licensegate
+description: Fail the build when an npm dependency's licence does not fit how you ship (SaaS, distributed, library, internal). Writes a CycloneDX SBOM and third-party notices.
+branding: { icon: check-circle, color: green }
+inputs:
+  mode: { description: 'saas | distributed | library | internal', default: saas }
+  path: { description: 'Directory with package-lock.json', default: '.' }
+  prod: { description: 'Skip devDependencies (true/false)', default: 'true' }
+  fail-on: { description: 'block or review', default: block }
+  allow: { description: 'Comma list of packages you have cleared', default: '' }
+  sbom: { description: 'Where to write the CycloneDX SBOM (empty to skip)', default: 'sbom.cdx.json' }
+  notices: { description: 'Where to write the notices file (empty to skip)', default: '' }
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        args=("${{ inputs.path }}" --mode "${{ inputs.mode }}" --fail-on "${{ inputs.fail-on }}")
+        [ "${{ inputs.prod }}" = "true" ] && args+=(--prod)
+        [ -n "${{ inputs.allow }}" ] && args+=(--allow "${{ inputs.allow }}")
+        [ -n "${{ inputs.sbom }}" ] && args+=(--sbom "${{ inputs.sbom }}")
+        [ -n "${{ inputs.notices }}" ] && args+=(--notices "${{ inputs.notices }}")
+        node "${{ github.action_path }}/cli.mjs" "${args[@]}"

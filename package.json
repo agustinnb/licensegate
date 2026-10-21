@@ -1,0 +1,12 @@
+{
+  "name": "licensegate",
+  "version": "0.1.0",
+  "description": "What your npm dependencies' licences mean for how you ship: SaaS, distributed app, library or internal. CI gate, CycloneDX SBOM and third-party notices. Offline, zero dependencies.",
+  "type": "module",
+  "bin": { "licensegate": "cli.mjs" },
+  "files": ["cli.mjs", "spdx.mjs", "detect.mjs", "action.yml", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": { "test": "node test.mjs" },
+  "keywords": ["license", "licence", "spdx", "sbom", "cyclonedx", "agpl", "gpl", "compliance", "ci"],
+  "license": "MIT"
+}

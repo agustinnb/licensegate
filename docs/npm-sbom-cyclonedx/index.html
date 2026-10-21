@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generate a CycloneDX SBOM for an npm project (one command, offline)</title><meta name="description" content="Create a CycloneDX 1.5 SBOM from package-lock.json with licences and purls, without installing anything. Why customers and the EU Cyber Resilience Act ask for one."><link rel="canonical" href="https://agustinnb.github.io/licensegate/npm-sbom-cyclonedx/">
+<meta property="og:title" content="Generate a CycloneDX SBOM for an npm project (one command, offline)"><meta property="og:description" content="Create a CycloneDX 1.5 SBOM from package-lock.json with licences and purls, without installing anything. Why customers and the EU Cyber Resilience Act ask for one."><meta property="og:url" content="https://agustinnb.github.io/licensegate/npm-sbom-cyclonedx/"><meta property="og:type" content="article">
+<meta name="theme-color" content="#f6f6f4"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%230b6b4f%22%2F%3E%3Cpath%20d%3D%22M9%2016.5l4.5%204.5L23%2011%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is an SBOM?","acceptedAnswer":{"@type":"Answer","text":"A software bill of materials: a machine-readable list of every component in your software, with versions and licences. CycloneDX and SPDX are the two common formats."}},{"@type":"Question","name":"Does the EU Cyber Resilience Act require an SBOM?","acceptedAnswer":{"@type":"Answer","text":"The CRA requires manufacturers of products with digital elements sold in the EU to draw up an SBOM as part of their technical documentation. Its vulnerability reporting duties start on 11 September 2026; most other obligations, including the SBOM, apply from 11 December 2027."}}]}</script><style>:root{--bg:#f6f6f4;--ink:#16181d;--mute:#4d535e;--line:#e3e0d8;--code:#f1eee6;--acc:#0b6b4f;--acc-ink:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#121417;--ink:#eceae4;--mute:#a7adb7;--line:#2b2f36;--code:#1c1f24;--acc:#4fd1a5;--acc-ink:#0b1210}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--acc);text-underline-offset:3px}a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.w{max-width:62rem;margin:0 auto;padding:0 16px}main>:not(h1){max-width:44rem}header{background:var(--code)}header .w{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:56px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;font-size:18px}nav a{margin-left:16px;font-size:16px}
+h1{font-size:clamp(32px,5.4vw,72px);line-height:1.12;letter-spacing:-.02em;margin:48px 0 16px;text-wrap:balance}h2{font-size:24px;line-height:1.25;margin:40px 0 8px;text-wrap:balance}h3{font-size:19px;margin:28px 0 4px}
+.lead{font-size:20px;color:var(--mute);margin:0 0 24px}p,li{max-width:68ch}
+pre{background:var(--code);padding:14px 16px;overflow-x:auto;font:15px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border-radius:6px}
+code{font:.9em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px}pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;font-size:16px;margin:16px 0;display:block;overflow-x:auto}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:var(--code)}
+.btn{display:inline-block;background:var(--acc);color:var(--acc-ink);padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:600;min-height:44px}
+.note{border-left:4px solid var(--acc);padding:8px 16px;background:var(--code);border-radius:0 6px 6px 0}
+.guides{list-style:none;padding:0}.guides li{padding:12px 0}.guides a{font-weight:600}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}main>*{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}main>:nth-child(2){animation-delay:.06s}main>:nth-child(3){animation-delay:.12s}main>:nth-child(n+4){animation-delay:.18s}@media (prefers-reduced-motion:reduce){main>*{animation:none}}footer{background:var(--code);margin-top:56px;padding:24px 0;color:var(--mute);font-size:15px}</style></head><body>
+<header><div class="w"><a class="brand" href="../">licensegate</a><nav><a href="../#guides">Guides</a><a href="https://github.com/agustinnb/licensegate">GitHub</a></nav></div></header>
+<main class="w"><h1>A CycloneDX SBOM for npm, in one command</h1><p class="lead">One command, no install, no upload: a CycloneDX 1.5 JSON with every package, version, purl and licence in your lockfile.</p><p><a class="btn" href="https://github.com/agustinnb/licensegate">Get licensegate on GitHub</a></p><pre data-ui><code>npx github:agustinnb/licensegate --prod --sbom sbom.cdx.json</code></pre>
+<p>The file follows CycloneDX 1.5. It includes each package with its <code>purl</code> (<code>pkg:npm/%40scope/name@1.2.3</code>), its licence as an SPDX id or expression, and your project as the root component. Most SBOM tools can read it: Dependency-Track, GitHub’s dependency graph uploaders, and the questionnaires security teams send.</p>
+<h2>Who asks for an SBOM</h2>
+<ul><li><strong>Enterprise customers</strong>, in security questionnaires and vendor onboarding.</li>
+<li><strong>Buyers of a software business</strong>, during due diligence.</li>
+<li><strong>The EU Cyber Resilience Act.</strong> Manufacturers of products with digital elements must keep an SBOM in their technical documentation. Vulnerability reporting starts on 11 September 2026; the rest applies from 11 December 2027.</li>
+<li><strong>US federal suppliers</strong>, following Executive Order 14028.</li></ul>
+<h2>In CI, on every release</h2>
+<pre data-ui><code>- run: npm ci
+- uses: agustinnb/licensegate@v0
+  with:
+    mode: saas
+    sbom: sbom.cdx.json
+- uses: actions/upload-artifact@v4
+  with: { name: sbom, path: sbom.cdx.json }</code></pre>
+<p>The same step checks licences against how you ship, so the SBOM and the licence gate come from one tool and one run.</p></main>
+<footer><div class="w">licensegate: an inventory and a risk flag, not legal advice · <a href="https://github.com/agustinnb/licensegate">Source on GitHub</a> · MIT licence</div></footer></body></html>

@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>licensegate: npm licence check by how you ship (SaaS, app, library)</title><meta name="description" content="Free CLI and GitHub Action: what your npm dependencies’ licences mean for a SaaS, a distributed app or a library. AGPL, GPL, LGPL, SPDX expressions, CycloneDX SBOM, notices."><link rel="canonical" href="https://agustinnb.github.io/licensegate/">
+<meta property="og:title" content="licensegate: npm licence check by how you ship (SaaS, app, library)"><meta property="og:description" content="Free CLI and GitHub Action: what your npm dependencies’ licences mean for a SaaS, a distributed app or a library. AGPL, GPL, LGPL, SPDX expressions, CycloneDX SBOM, notices."><meta property="og:url" content="https://agustinnb.github.io/licensegate/"><meta property="og:type" content="website">
+<meta name="theme-color" content="#f6f6f4"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%230b6b4f%22%2F%3E%3Cpath%20d%3D%22M9%2016.5l4.5%204.5L23%2011%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"licensegate","applicationCategory":"DeveloperApplication","operatingSystem":"Any (Node.js 18+)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"url":"https://agustinnb.github.io/licensegate/","license":"https://opensource.org/licenses/MIT","description":"Checks what the licences of your npm dependencies mean for how you ship (SaaS, distributed app, library or internal), fails CI on a conflict, and writes a CycloneDX SBOM and third-party notices."}</script><style>:root{--bg:#f6f6f4;--ink:#16181d;--mute:#4d535e;--line:#e3e0d8;--code:#f1eee6;--acc:#0b6b4f;--acc-ink:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#121417;--ink:#eceae4;--mute:#a7adb7;--line:#2b2f36;--code:#1c1f24;--acc:#4fd1a5;--acc-ink:#0b1210}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--acc);text-underline-offset:3px}a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.w{max-width:62rem;margin:0 auto;padding:0 16px}main>:not(h1){max-width:44rem}header{background:var(--code)}header .w{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:56px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--ink);text-decoration:none;font-size:18px}nav a{margin-left:16px;font-size:16px}
+h1{font-size:clamp(32px,5.4vw,72px);line-height:1.12;letter-spacing:-.02em;margin:48px 0 16px;text-wrap:balance}h2{font-size:24px;line-height:1.25;margin:40px 0 8px;text-wrap:balance}h3{font-size:19px;margin:28px 0 4px}
+.lead{font-size:20px;color:var(--mute);margin:0 0 24px}p,li{max-width:68ch}
+pre{background:var(--code);padding:14px 16px;overflow-x:auto;font:15px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border-radius:6px}
+code{font:.9em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px}pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;font-size:16px;margin:16px 0;display:block;overflow-x:auto}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:var(--code)}
+.btn{display:inline-block;background:var(--acc);color:var(--acc-ink);padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:600;min-height:44px}
+.note{border-left:4px solid var(--acc);padding:8px 16px;background:var(--code);border-radius:0 6px 6px 0}
+.guides{list-style:none;padding:0}.guides li{padding:12px 0}.guides a{font-weight:600}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}main>*{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}main>:nth-child(2){animation-delay:.06s}main>:nth-child(3){animation-delay:.12s}main>:nth-child(n+4){animation-delay:.18s}@media (prefers-reduced-motion:reduce){main>*{animation:none}}footer{background:var(--code);margin-top:56px;padding:24px 0;color:var(--mute);font-size:15px}</style></head><body>
+<header><div class="w"><a class="brand" href="./">licensegate</a><nav><a href="#guides">Guides</a><a href="https://github.com/agustinnb/licensegate">GitHub</a></nav></div></header>
+<main class="w"><h1>npm licences, checked by how you ship</h1><p class="lead">AGPL matters for a SaaS, GPL matters for an app people download. licensegate reads your whole dependency tree and tells you which packages conflict with <em>your</em> way of shipping.</p><pre data-ui><code>npx github:agustinnb/licensegate --mode saas --prod</code></pre>
+<pre data-ui><code>licensegate 0.1.0 · mode saas · production only · 412 packages from package-lock.json
+  BLOCK  some-db-driver@2.0.0  AGPL-3.0-only
+         network copyleft: users who reach the program over a network can ask for its source
+  REVIEW fancy-chart@1.4.2  CC-BY-NC-4.0
+         source-available or non-commercial terms: check the commercial use clause
+  410 ok · 1 to review · 1 blocking</code></pre>
+<p><a class="btn" href="https://github.com/agustinnb/licensegate">Get it on GitHub</a></p>
+<h2>Why the way you ship changes the answer</h2>
+<table><thead><tr><th>You ship…</th><th><code>--mode</code></th><th>AGPL</th><th>GPL</th><th>LGPL / MPL</th><th>Non-commercial</th></tr></thead><tbody>
+<tr><td>A hosted web app or API</td><td><code>saas</code></td><td>block</td><td>ok</td><td>ok</td><td>review</td></tr>
+<tr><td>An app people download (desktop, mobile, Electron, on-prem)</td><td><code>distributed</code></td><td>block</td><td>block</td><td>review</td><td>review</td></tr>
+<tr><td>A package other people install</td><td><code>library</code></td><td>block</td><td>block</td><td>review</td><td>review</td></tr>
+<tr><td>Internal tools only</td><td><code>internal</code></td><td>ok</td><td>ok</td><td>ok</td><td>review</td></tr></tbody></table>
+<p>A list of licence names, which is what most checkers print, doesn't tell you which of them is a problem. A GPL package is usually fine on a server you run yourself. The same package can become a problem when you ship a desktop app. licensegate applies that rule to every package, including the ones you never installed directly.</p>
+<h2>What it does</h2>
+<ul><li>Reads <code>package-lock.json</code> (v2/v3) or <code>node_modules</code>.</li>
+<li>Resolves SPDX expressions: <code>MIT OR GPL-3.0</code> means you pick MIT. Handles <code>WITH</code> exceptions, old <code>licenses</code> arrays and loose names.</li>
+<li>When <code>package.json</code> says <code>SEE LICENSE IN…</code> or nothing, it reads the package’s LICENSE text.</li>
+<li>Exit code 1 in CI when something blocks your mode. <code>--allow</code> clears a package you have checked.</li>
+<li>Writes a CycloneDX 1.5 SBOM (<code>--sbom</code>) and a third-party notices file with every licence text (<code>--notices</code>).</li>
+<li>Runs offline with zero dependencies. Your code never leaves your machine.</li></ul>
+<h2>GitHub Action</h2>
+<pre data-ui><code>- run: npm ci
+- uses: agustinnb/licensegate@v0
+  with:
+    mode: saas
+    sbom: sbom.cdx.json</code></pre><h2 id="guides">Guides</h2><ul class="guides"><li><a href="agpl-in-saas/">Can I use an AGPL npm package in a SaaS?</a><br>AGPL adds a network clause to the GPL: if users interact with your modified program over a network, they can ask for its source. How to find AGPL packages in your npm tree before they ship.</li><li><a href="gpl-lgpl-javascript-bundle/">GPL and LGPL in a JavaScript bundle</a><br>Shipping a bundle or an Electron app is distribution. GPL code inside it can pull your app under the GPL; LGPL asks that users can replace the library. What to check in your npm tree.</li><li><a href="npm-sbom-cyclonedx/">A CycloneDX SBOM for npm, in one command</a><br>Create a CycloneDX 1.5 SBOM from package-lock.json with licences and purls, without installing anything. Why customers and the EU Cyber Resilience Act ask for one.</li><li><a href="licence-audit-before-selling-a-saas/">Licence audit before selling a SaaS</a><br>Buyers ask whether your code has GPL or AGPL in it. How to produce a dependency licence inventory, an SBOM and third-party notices in minutes before a sale or a client handover.</li></ul></main>
+<footer><div class="w">licensegate: an inventory and a risk flag, not legal advice · <a href="https://github.com/agustinnb/licensegate">Source on GitHub</a> · MIT licence</div></footer></body></html>
